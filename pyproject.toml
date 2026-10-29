@@ -1,66 +1,54 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "time2model"
-version = "0.0.1"
-description = "Playground for turning transit time-series into graph-native datasets and deep learning models."
+name = "bus-embeddings"
+version = "1.0.0"
+description = "Inductive embeddings of public transport networks with heterogeneous graph neural networks."
 readme = "README.md"
 requires-python = "~=3.11.0"
-license = { text = "LicenseRef-Proprietary" }
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     { name = "Alexander Horn", email = "alexander.horn@thi.de" },
     { name = "Rahul Mondal", email = "rahul.mondal@thi.de" },
+    { name = "Philip-Roman Adam", email = "philip-roman.adam@thi.de" },
+    { name = "Patrick Cato", email = "patrick.cato@thi.de" },
+    { name = "Stefanie Schmidtner", email = "stefanie.schmidtner@thi.de" },
 ]
 dependencies = [
     "numpy>=2.0",
     "pandas>=2.1",
-    "pyyaml>=6.0",
-    "torch==2.7.0+cu128",
-    "torch-scatter==2.1.2+pt27cu128",
-    "torch-sparse==0.6.18+pt27cu128",
-    "torch-cluster==1.6.3+pt27cu128",
-    "torch-spline-conv==1.2.2+pt27cu128",
-    "torch-geometric==2.7.0",
-    "matplotlib",
-    "networkx",
-    "seaborn",
-    "plotly",
-    "scikit-learn",
-    "wandb",
     "pyarrow",
-    "geopandas",
-    "osmnx>=2.0",
-    "tqdm",
-    "contextily>=1.7.0",
-    "routingpy>=1.3.0",
-    "holidays>=0.90",
+    "torch==2.7.0+cu128",
+    "torch-geometric==2.7.0",
+    "scikit-learn",
     "xgboost>=3.2.0",
+    "holidays>=0.90",
+    "geopandas",
+    "shapely",
+    "osmnx>=2.0",
+    "routingpy>=1.3.0",
+    "requests",
+    "tqdm",
+    "matplotlib",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7.4",
-]
+wandb = ["wandb"]
 
 [project.urls]
-Homepage = "https://github.com/urbanaithi/bus-embeddings"
+Repository = "https://github.com/urbanaithi/bus-embeddings"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.uv]
-extra-index-url = ["https://download.pytorch.org/whl/cu128"]
-find-links = ["https://data.pyg.org/whl/torch-2.7.0+cu128.html"]
+# PyTorch with CUDA 12.8 from the PyTorch index, everything else from PyPI
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
 
-[tool.pyright]
-include = ["src"]
-exclude = [
-    "**/node_modules",
-    "**/__pycache__",
-    "**/wandb",
-    "artifacts",
-]
-pythonVersion = "3.11"
-typeCheckingMode = "standard"
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
